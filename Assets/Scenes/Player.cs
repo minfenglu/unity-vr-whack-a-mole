@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public int score = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +20,7 @@ public class Player : MonoBehaviour
                 if (hit.transform.GetComponent<Mole> () != null) {
                     Mole mole = hit.transform.GetComponent<Mole> ();
                     mole.OnHit();
+                    score++;
                 }
             }
         }        

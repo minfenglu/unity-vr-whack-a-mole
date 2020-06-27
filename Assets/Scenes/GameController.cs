@@ -1,13 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviour
 {
     public GameObject moleContainer;
+    public TextMesh infoText;
+    public Player player;
+
     public float spawnDuration = 3f;
     public float minimumSpawnDuraiton = 1.5f;
     public float spawnDecrement = 0.1f;
+    public float gameTimer = 15f;
+    public float resetTimer = 3f;
     private float spawnTimer = 0f;
     private Mole[] moles;
 
@@ -21,13 +26,25 @@ public class GameController : MonoBehaviour
     void Update()
     {
         spawnTimer -= Time.deltaTime;
-        if (spawnTimer <= 0) {
-            moles[Random.Range(0, moles.Length)].Rise();
-            spawnDuration -= spawnDecrement;
-            if (spawnDuration < minimumSpawnDuraiton) {
-                spawnDuration = minimumSpawnDuraiton;
+        gameTimer -= Time.deltaTime;
+        if (gameTimer > 0) {
+            if (spawnTimer <= 0) {
+                moles[Random.Range(0, moles.Length)].Rise();
+                spawnDuration -= spawnDecrement;
+                if (spawnDuration < minimumSpawnDuraiton) {
+                    spawnDuration = minimumSpawnDuraiton;
+                }
+                spawnTimer = spawnDuration;
             }
-            spawnTimer = spawnDuration;
+            infoText.text = "Hit all the moles!\nTime: " + Mathf.Floor(gameTimer) +"\nScore: " + player.score;
         }
+        else {
+            infoText.text = "Game Over. Your score: " + player.score;
+            resetTimer -= Time.deltaTime;
+            if (resetTimer <= 0f) {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
+        }
+
     }
 }
